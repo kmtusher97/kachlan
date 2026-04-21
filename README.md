@@ -18,19 +18,19 @@ Fast video compression CLI powered by ffmpeg. Compress a single file or an entir
 <tr>
 <td align="center" width="33%">
 <h3>Windows</h3>
-<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_windows_amd64.zip">Download for Windows (x64)</a></p>
-<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_windows_arm64.zip">Download for Windows (ARM)</a></p>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.4.0_windows_amd64.zip">Download for Windows (x64)</a></p>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.4.0_windows_arm64.zip">Download for Windows (ARM)</a></p>
 <p><sub>Extract the zip, double-click <code>kachlan.exe</code></sub></p>
 </td>
 <td align="center" width="33%">
 <h3>macOS</h3>
 <p><code>brew install kmtusher97/tap/kachlan</code></p>
-<p>or <a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_darwin_arm64.tar.gz">Apple Silicon</a> | <a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_darwin_amd64.tar.gz">Intel</a></p>
+<p>or <a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.4.0_darwin_arm64.tar.gz">Apple Silicon</a> | <a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.4.0_darwin_amd64.tar.gz">Intel</a></p>
 </td>
 <td align="center" width="33%">
 <h3>Linux</h3>
-<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_linux_amd64.deb">Download .deb (x64)</a></p>
-<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_linux_amd64.rpm">Download .rpm (x64)</a></p>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.4.0_linux_amd64.deb">Download .deb (x64)</a></p>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.4.0_linux_amd64.rpm">Download .rpm (x64)</a></p>
 <p><sub>Install: <code>sudo dpkg -i kachlan_*.deb</code></sub></p>
 </td>
 </tr>
