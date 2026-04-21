@@ -144,7 +144,9 @@ func TestCompressFolderCreatesCompressedFolder(t *testing.T) {
 
 	dir := t.TempDir()
 	srcDir := filepath.Join(dir, "my-videos")
-	os.MkdirAll(srcDir, 0755)
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	generateTestVideo(t, srcDir, "a.mp4")
 	generateTestVideo(t, srcDir, "b.mov")
@@ -172,7 +174,9 @@ func TestCompressFolderCustomOutput(t *testing.T) {
 	dir := t.TempDir()
 	srcDir := filepath.Join(dir, "videos")
 	outDir := filepath.Join(dir, "output")
-	os.MkdirAll(srcDir, 0755)
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	generateTestVideo(t, srcDir, "clip.mp4")
 
@@ -193,7 +197,9 @@ func TestCompressFolderPreservesSubdirs(t *testing.T) {
 	dir := t.TempDir()
 	srcDir := filepath.Join(dir, "media")
 	subDir := filepath.Join(srcDir, "sub")
-	os.MkdirAll(subDir, 0755)
+	if err := os.MkdirAll(subDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	generateTestVideo(t, srcDir, "top.mp4")
 	generateTestVideo(t, subDir, "nested.mp4")
@@ -217,11 +223,17 @@ func TestCompressFolderSkipsNonVideoFiles(t *testing.T) {
 
 	dir := t.TempDir()
 	srcDir := filepath.Join(dir, "mixed")
-	os.MkdirAll(srcDir, 0755)
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	generateTestVideo(t, srcDir, "real.mp4")
-	os.WriteFile(filepath.Join(srcDir, "notes.txt"), []byte("hello"), 0644)
-	os.WriteFile(filepath.Join(srcDir, "photo.jpg"), []byte{0xFF, 0xD8}, 0644)
+	if err := os.WriteFile(filepath.Join(srcDir, "notes.txt"), []byte("hello"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(srcDir, "photo.jpg"), []byte{0xFF, 0xD8}, 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	err := compressFolder(srcDir, 28, "ultrafast", "", 1)
 	if err != nil {
@@ -246,10 +258,14 @@ func TestCompressFolderSkipsNonVideoFiles(t *testing.T) {
 func TestCompressFolderEmptyReturnsError(t *testing.T) {
 	dir := t.TempDir()
 	srcDir := filepath.Join(dir, "empty")
-	os.MkdirAll(srcDir, 0755)
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	// Add non-video files only
-	os.WriteFile(filepath.Join(srcDir, "readme.txt"), []byte("hi"), 0644)
+	if err := os.WriteFile(filepath.Join(srcDir, "readme.txt"), []byte("hi"), 0644); err != nil {
+		t.Fatal(err)
+	}
 
 	err := compressFolder(srcDir, 28, "ultrafast", "", 1)
 	if err == nil {
@@ -262,7 +278,9 @@ func TestCompressFolderParallelWorkers(t *testing.T) {
 
 	dir := t.TempDir()
 	srcDir := filepath.Join(dir, "parallel")
-	os.MkdirAll(srcDir, 0755)
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	generateTestVideo(t, srcDir, "v1.mp4")
 	generateTestVideo(t, srcDir, "v2.mp4")
@@ -286,7 +304,9 @@ func TestCompressFolderOriginalUntouched(t *testing.T) {
 
 	dir := t.TempDir()
 	srcDir := filepath.Join(dir, "originals")
-	os.MkdirAll(srcDir, 0755)
+	if err := os.MkdirAll(srcDir, 0755); err != nil {
+		t.Fatal(err)
+	}
 
 	input := generateTestVideo(t, srcDir, "keep.mp4")
 	before, _ := os.Stat(input)
