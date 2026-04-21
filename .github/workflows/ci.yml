@@ -88,31 +88,19 @@ jobs:
       - name: Install system dependencies
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then
-            sudo apt-get update && sudo apt-get install -y ffmpeg libgtk-3-dev libwebkit2gtk-4.1-dev
+            sudo apt-get update && sudo apt-get install -y ffmpeg libgtk-3-dev libwebkit2gtk-4.0-dev
           else
             brew install ffmpeg
           fi
 
       - name: Test
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" = "Linux" ]; then
-            go test -v -race -tags webkit2gtk_41 ./...
-          else
-            go test -v -race ./...
-          fi
+        run: go test -v -race ./...
 
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
       - name: Build
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" = "Linux" ]; then
-            wails build -tags "webkit2gtk_41"
-          else
-            wails build
-          fi
+        run: wails build
 
   lint:
     runs-on: ubuntu-latest
