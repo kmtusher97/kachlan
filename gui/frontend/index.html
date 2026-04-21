@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kachlan</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header>
+      <div class="logo-row">
+        <img src="/src/logo.svg" alt="kachlan" class="logo" />
+        <div>
+          <h1>kachlan</h1>
+          <p class="subtitle">squeeze the excess out of your videos</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ffmpeg warning (hidden by default) -->
+    <div id="ffmpeg-warning" class="warning hidden">
+      ffmpeg is not installed. Please install it first.
+    </div>
+
+    <!-- Drop zone / file picker -->
+    <div id="drop-zone" class="drop-zone">
+      <div class="drop-icon">🍋</div>
+      <p>Drop video file or folder here</p>
+      <div class="drop-buttons">
+        <button id="btn-file" class="btn btn-primary">Choose File</button>
+        <button id="btn-folder" class="btn btn-secondary">Choose Folder</button>
+      </div>
+    </div>
+
+    <!-- Selected input display -->
+    <div id="selected-input" class="selected-input hidden">
+      <div class="selected-info">
+        <span id="input-icon" class="input-icon">📄</span>
+        <span id="input-path" class="input-path"></span>
+      </div>
+      <button id="btn-clear" class="btn-clear" title="Clear">&times;</button>
+    </div>
+
+    <!-- Settings -->
+    <div id="settings" class="settings hidden">
+      <div class="setting">
+        <label for="crf">Quality (CRF): <span id="crf-value">28</span></label>
+        <input type="range" id="crf" min="18" max="40" value="28" />
+        <div class="range-labels">
+          <span>Higher quality</span>
+          <span>Smaller file</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="setting">
+          <label for="preset">Speed</label>
+          <select id="preset">
+            <option value="ultrafast">Ultra Fast</option>
+            <option value="superfast">Super Fast</option>
+            <option value="veryfast">Very Fast</option>
+            <option value="faster">Faster</option>
+            <option value="fast" selected>Fast</option>
+            <option value="medium">Medium</option>
+            <option value="slow">Slow</option>
+            <option value="slower">Slower</option>
+            <option value="veryslow">Very Slow</option>
+          </select>
+        </div>
+        <div id="workers-setting" class="setting hidden">
+          <label for="workers">Workers</label>
+          <input type="number" id="workers" min="1" max="8" value="2" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div id="actions" class="actions hidden">
+      <button id="btn-compress" class="btn btn-compress">Compress</button>
+      <button id="btn-cancel" class="btn btn-cancel hidden">Cancel</button>
+    </div>
+
+    <!-- Progress -->
+    <div id="progress" class="progress hidden">
+      <div class="progress-header">
+        <span id="progress-text">Compressing...</span>
+        <span id="progress-count"></span>
+      </div>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+      <p id="progress-file" class="progress-file"></p>
+    </div>
+
+    <!-- Results -->
+    <div id="results" class="results hidden">
+      <h3>Results</h3>
+      <div id="results-list"></div>
+      <div id="results-errors" class="results-errors hidden"></div>
+    </div>
+  </div>
+
+  <script src="/src/main.js"></script>
+</body>
+</html>
