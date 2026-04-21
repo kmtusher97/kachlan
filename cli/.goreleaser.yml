@@ -44,6 +44,7 @@ brews:
   - repository:
       owner: kmtusher97
       name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     homepage: "https://github.com/kmtusher97/kachlan"
     description: "Fast video compression powered by ffmpeg"
     license: "MIT"
