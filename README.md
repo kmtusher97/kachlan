@@ -26,6 +26,12 @@ sudo dpkg -i kachlan.deb
 
 See [Releases](https://github.com/kmtusher97/kachlan/releases) for all versions and architectures (`.deb`, `.rpm`).
 
+### Windows
+
+Download the `.zip` from [Releases](https://github.com/kmtusher97/kachlan/releases), extract it, and add `kachlan.exe` to your PATH.
+
+> Install ffmpeg via `winget install ffmpeg` or [download it here](https://ffmpeg.org/download.html).
+
 ### Go install
 
 ```bash

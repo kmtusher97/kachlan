@@ -55,7 +55,7 @@ func newRootCmd() *cobra.Command {
 
 func run(input string, crf int, preset, output string, workers int) error {
 	if _, err := exec.LookPath("ffmpeg"); err != nil {
-		return fmt.Errorf("ffmpeg is not installed. Install it first:\n  macOS:  brew install ffmpeg\n  Ubuntu: sudo apt install ffmpeg\n  Fedora: sudo dnf install ffmpeg")
+		return fmt.Errorf("ffmpeg is not installed. Install it first:\n  macOS:   brew install ffmpeg\n  Ubuntu:  sudo apt install ffmpeg\n  Fedora:  sudo dnf install ffmpeg\n  Windows: winget install ffmpeg")
 	}
 
 	info, err := os.Stat(input)
