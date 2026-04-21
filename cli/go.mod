@@ -1,4 +1,4 @@
-module github.com/kmtusher97/kachlan
+module github.com/kmtusher97/kachlan/cli
 
 go 1.24
 

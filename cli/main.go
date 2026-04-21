@@ -1,23 +1,18 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 	"sync"
 
+	"github.com/kmtusher97/kachlan/media"
 	"github.com/spf13/cobra"
 )
 
 var version = "dev"
-
-var videoExts = map[string]bool{
-	".mp4": true, ".avi": true, ".mov": true, ".mkv": true,
-	".wmv": true, ".flv": true, ".webm": true, ".m4v": true,
-	".mpg": true, ".mpeg": true, ".3gp": true, ".ts": true,
-}
 
 func main() {
 	if err := newRootCmd().Execute(); err != nil {
@@ -71,30 +66,27 @@ func run(input string, crf int, preset, output string, workers int) error {
 
 func compressSingle(input string, crf int, preset, output string) error {
 	if output == "" {
-		ext := filepath.Ext(input)
-		base := strings.TrimSuffix(input, ext)
-		output = base + "-compressed" + ext
+		output = media.DefaultOutputPath(input, "compressed")
 	}
-	return compressVideo(input, output, crf, preset)
+
+	fmt.Printf("Compressing: %s → %s\n", input, output)
+
+	if err := media.CompressVideo(context.Background(), input, output, crf, preset, nil); err != nil {
+		return err
+	}
+
+	printSizeComparison(input, output)
+	return nil
 }
 
 func compressFolder(input string, crf int, preset, outDir string, workers int) error {
 	input = filepath.Clean(input)
 
 	if outDir == "" {
-		outDir = input + "-compressed"
+		outDir = media.DefaultOutputDir(input, "compressed")
 	}
 
-	var videos []string
-	err := filepath.Walk(input, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if !info.IsDir() && isVideo(path) {
-			videos = append(videos, path)
-		}
-		return nil
-	})
+	videos, err := media.FindVideos(input)
 	if err != nil {
 		return fmt.Errorf("scanning folder: %w", err)
 	}
@@ -124,11 +116,16 @@ func compressFolder(input string, crf int, preset, outDir string, workers int) e
 			sem <- struct{}{}
 			defer func() { <-sem }()
 
-			if err := compressVideo(src, dst, crf, preset); err != nil {
+			fmt.Printf("Compressing: %s → %s\n", src, dst)
+
+			if err := media.CompressVideo(context.Background(), src, dst, crf, preset, nil); err != nil {
 				mu.Lock()
 				errs = append(errs, err)
 				mu.Unlock()
+				return
 			}
+
+			printSizeComparison(src, dst)
 		}(v, dst)
 	}
 
@@ -146,43 +143,7 @@ func compressFolder(input string, crf int, preset, outDir string, workers int) e
 	return nil
 }
 
-func compressVideo(input, output string, crf int, preset string) error {
-	fmt.Printf("Compressing: %s → %s\n", input, output)
-
-	cmd := exec.Command("ffmpeg",
-		"-i", input,
-		"-vcodec", "libx264",
-		"-crf", fmt.Sprintf("%d", crf),
-		"-preset", preset,
-		"-acodec", "aac",
-		"-y",
-		output,
-	)
-	cmd.Stderr = os.Stderr
-
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("failed to compress %s: %w", input, err)
-	}
-
-	printSizeComparison(input, output)
-	return nil
-}
-
 func printSizeComparison(input, output string) {
-	inInfo, err1 := os.Stat(input)
-	outInfo, err2 := os.Stat(output)
-	if err1 != nil || err2 != nil {
-		return
-	}
-
-	inMB := float64(inInfo.Size()) / 1024 / 1024
-	outMB := float64(outInfo.Size()) / 1024 / 1024
-	reduction := (1 - outMB/inMB) * 100
-
-	fmt.Printf("  ✓ %s: %.1f MB → %.1f MB (%.1f%% smaller)\n", filepath.Base(input), inMB, outMB, reduction)
-}
-
-func isVideo(path string) bool {
-	ext := strings.ToLower(filepath.Ext(path))
-	return videoExts[ext]
+	s := media.ComputeSizes(input, output)
+	fmt.Printf("  ✓ %s: %.1f MB → %.1f MB (%.1f%% smaller)\n", filepath.Base(input), s.InputMB, s.OutputMB, s.ReductionPct)
 }
