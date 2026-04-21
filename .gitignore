@@ -15,6 +15,8 @@ go.work.sum
 
 # GUI build output
 gui/build/bin/
+gui/build/darwin/
+gui/gui
 
 # Wails auto-generated bindings
 gui/frontend/wailsjs/
