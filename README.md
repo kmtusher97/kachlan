@@ -8,49 +8,47 @@
 
 Fast video compression CLI powered by ffmpeg. Compress a single file or an entire folder with one command.
 
-## Install
+## Download
 
-### Homebrew (macOS/Linux)
+> **Prerequisite:** [ffmpeg](https://ffmpeg.org/download.html) must be installed and available in your PATH.
+>
+> macOS: `brew install ffmpeg` | Ubuntu: `sudo apt install ffmpeg` | Windows: `winget install ffmpeg`
+
+<table>
+<tr>
+<td align="center" width="33%">
+<h3>Windows</h3>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_windows_amd64.zip">Download for Windows (x64)</a></p>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_windows_arm64.zip">Download for Windows (ARM)</a></p>
+<p><sub>Extract the zip, double-click <code>kachlan.exe</code></sub></p>
+</td>
+<td align="center" width="33%">
+<h3>macOS</h3>
+<p><code>brew install kmtusher97/tap/kachlan</code></p>
+<p>or <a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_darwin_arm64.tar.gz">Apple Silicon</a> | <a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_darwin_amd64.tar.gz">Intel</a></p>
+</td>
+<td align="center" width="33%">
+<h3>Linux</h3>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_linux_amd64.deb">Download .deb (x64)</a></p>
+<p><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.3.0_linux_amd64.rpm">Download .rpm (x64)</a></p>
+<p><sub>Install: <code>sudo dpkg -i kachlan_*.deb</code></sub></p>
+</td>
+</tr>
+</table>
+
+<p align="center"><a href="https://github.com/kmtusher97/kachlan/releases">All releases and architectures</a></p>
+
+### Other install methods
 
 ```bash
-brew install kmtusher97/tap/kachlan
-```
-
-### Debian/Ubuntu
-
-```bash
-# Download the latest .deb from the releases page
-curl -sL https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.2.0_linux_amd64.deb -o kachlan.deb
-sudo dpkg -i kachlan.deb
-```
-
-See [Releases](https://github.com/kmtusher97/kachlan/releases) for all versions and architectures (`.deb`, `.rpm`).
-
-### Windows
-
-Download the `.zip` from [Releases](https://github.com/kmtusher97/kachlan/releases), extract it, and add `kachlan.exe` to your PATH.
-
-> Install ffmpeg via `winget install ffmpeg` or [download it here](https://ffmpeg.org/download.html).
-
-### Go install
-
-```bash
+# Go install
 go install github.com/kmtusher97/kachlan/cli@latest
-```
 
-### From source
-
-```bash
+# From source
 git clone https://github.com/kmtusher97/kachlan.git
 cd kachlan/cli
 make install
 ```
-
-### Download binary
-
-Grab a prebuilt binary from [Releases](https://github.com/kmtusher97/kachlan/releases).
-
-> **Prerequisite:** [ffmpeg](https://ffmpeg.org/download.html) must be installed and available in your PATH.
 
 ## Usage
 
