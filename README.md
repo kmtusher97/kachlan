@@ -7,26 +7,26 @@ Fast video compression CLI powered by ffmpeg. Compress a single file or an entir
 ### Homebrew (macOS/Linux)
 
 ```bash
-brew install OWNER/tap/kachlan
+brew install kmtusher97/tap/kachlan
 ```
 
 ### Go install
 
 ```bash
-go install github.com/OWNER/kachlan/cli@latest
+go install github.com/kmtusher97/kachlan/cli@latest
 ```
 
 ### From source
 
 ```bash
-git clone https://github.com/OWNER/kachlan.git
+git clone https://github.com/kmtusher97/kachlan.git
 cd kachlan/cli
 make install
 ```
 
 ### Download binary
 
-Grab a prebuilt binary from [Releases](https://github.com/OWNER/kachlan/releases).
+Grab a prebuilt binary from [Releases](https://github.com/kmtusher97/kachlan/releases).
 
 > **Prerequisite:** [ffmpeg](https://ffmpeg.org/download.html) must be installed and available in your PATH.
 

@@ -1,4 +1,4 @@
-module github.com/kamrul-hasan/kachlan
+module github.com/kmtusher97/kachlan
 
 go 1.26.2
 

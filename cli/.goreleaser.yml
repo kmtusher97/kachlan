@@ -30,9 +30,9 @@ changelog:
 
 brews:
   - repository:
-      owner: OWNER
+      owner: kmtusher97
       name: homebrew-tap
-    homepage: "https://github.com/OWNER/kachlan"
+    homepage: "https://github.com/kmtusher97/kachlan"
     description: "Fast video compression powered by ffmpeg"
     license: "MIT"
     dependencies:
