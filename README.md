@@ -4,7 +4,7 @@
   <img src="assets/logo.svg" alt="kachlan - sliced lime" width="200"/>
 </p>
 
-**kachlan** (কচলান) — Bengali for *squeezing juice from a lime*. Just like wringing every last drop from a lime, kachlan squeezes the excess out of your video files.
+**kachlan** (কচলান) — Bangla for *squeezing juice from a lime*. Just like wringing every last drop from a lime, kachlan squeezes the excess out of your video files.
 
 Fast video compression CLI powered by ffmpeg. Compress a single file or an entire folder with one command.
 
