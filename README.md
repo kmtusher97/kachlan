@@ -16,6 +16,14 @@ Fast video compression CLI powered by ffmpeg. Compress a single file or an entir
 brew install kmtusher97/tap/kachlan
 ```
 
+### Debian/Ubuntu
+
+```bash
+# Download the latest .deb (replace VERSION and ARCH as needed)
+curl -LO https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_VERSION_linux_amd64.deb
+sudo dpkg -i kachlan_*_linux_amd64.deb
+```
+
 ### Go install
 
 ```bash
