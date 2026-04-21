@@ -20,6 +20,18 @@ archives:
 checksum:
   name_template: "checksums.txt"
 
+nfpms:
+  - package_name: kachlan
+    vendor: kmtusher97
+    homepage: "https://github.com/kmtusher97/kachlan"
+    description: "Fast video compression powered by ffmpeg"
+    license: "MIT"
+    formats:
+      - deb
+      - rpm
+    dependencies:
+      - ffmpeg
+
 changelog:
   sort: asc
   filters:
