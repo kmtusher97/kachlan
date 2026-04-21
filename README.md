@@ -19,10 +19,12 @@ brew install kmtusher97/tap/kachlan
 ### Debian/Ubuntu
 
 ```bash
-# Download the latest .deb (replace VERSION and ARCH as needed)
-curl -LO https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_VERSION_linux_amd64.deb
-sudo dpkg -i kachlan_*_linux_amd64.deb
+# Download the latest .deb from the releases page
+curl -sL https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan_0.2.0_linux_amd64.deb -o kachlan.deb
+sudo dpkg -i kachlan.deb
 ```
+
+See [Releases](https://github.com/kmtusher97/kachlan/releases) for all versions and architectures (`.deb`, `.rpm`).
 
 ### Go install
 
