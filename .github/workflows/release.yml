@@ -100,8 +100,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd ..
           VERSION=${GITHUB_REF#refs/tags/}
-          FINAL_NAME=$(echo "${{ matrix.artifact }}" | sed "s/kachlan-gui_/kachlan-gui_${VERSION}_/")
-          mv "gui/${{ matrix.artifact }}" "$FINAL_NAME"
-          gh release upload "$VERSION" "$FINAL_NAME" --clobber
+          gh release upload "$VERSION" "${{ matrix.artifact }}" --clobber

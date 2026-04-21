@@ -16,7 +16,7 @@ builds:
 
 archives:
   - format: tar.gz
-    name_template: "kachlan_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: "kachlan_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
         format: zip
@@ -26,6 +26,7 @@ checksum:
 
 nfpms:
   - package_name: kachlan
+    file_name_template: "kachlan_{{ .Os }}_{{ .Arch }}"
     vendor: kmtusher97
     homepage: "https://github.com/kmtusher97/kachlan"
     description: "Fast video compression powered by ffmpeg"
