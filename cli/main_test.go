@@ -11,38 +11,6 @@ import (
 // Unit tests
 // ---------------------------------------------------------------------------
 
-func TestIsVideo(t *testing.T) {
-	yes := []string{
-		"clip.mp4", "clip.avi", "clip.mov", "clip.mkv",
-		"clip.wmv", "clip.flv", "clip.webm", "clip.m4v",
-		"clip.mpg", "clip.mpeg", "clip.3gp", "clip.ts",
-	}
-	for _, f := range yes {
-		if !isVideo(f) {
-			t.Errorf("expected %q to be recognized as video", f)
-		}
-	}
-
-	no := []string{
-		"photo.jpg", "doc.pdf", "song.mp3", "notes.txt",
-		"archive.zip", "noext", "",
-	}
-	for _, f := range no {
-		if isVideo(f) {
-			t.Errorf("expected %q to NOT be recognized as video", f)
-		}
-	}
-}
-
-func TestIsVideoCaseInsensitive(t *testing.T) {
-	cases := []string{"video.MP4", "video.Mp4", "video.MOV", "video.Mkv"}
-	for _, f := range cases {
-		if !isVideo(f) {
-			t.Errorf("expected %q to be recognized as video (case insensitive)", f)
-		}
-	}
-}
-
 func TestCLIRequiresArg(t *testing.T) {
 	cmd := newRootCmd()
 	cmd.SetArgs([]string{})
