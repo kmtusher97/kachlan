@@ -93,24 +93,26 @@ jobs:
             brew install ffmpeg
           fi
 
-      - name: Set Wails build tags
-        id: wails-tags
+      - name: Test
         shell: bash
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then
-            echo "tags=-tags webkit2gtk_41" >> "$GITHUB_OUTPUT"
+            go test -v -race -tags webkit2gtk_41 ./...
           else
-            echo "tags=" >> "$GITHUB_OUTPUT"
+            go test -v -race ./...
           fi
-
-      - name: Test
-        run: go test -v -race ${{ steps.wails-tags.outputs.tags }} ./...
 
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
       - name: Build
-        run: wails build ${{ steps.wails-tags.outputs.tags }}
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            wails build -tags "webkit2gtk_41"
+          else
+            wails build
+          fi
 
   lint:
     runs-on: ubuntu-latest
