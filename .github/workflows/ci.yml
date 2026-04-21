@@ -94,7 +94,12 @@ jobs:
           fi
 
       - name: Test
-        run: go test -v -race -tags webkit2gtk_41 ./...
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            # Create pkg-config alias for webkit2gtk-4.0 -> webkit2gtk-4.1
+            sudo ln -sf /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.1.pc /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.0.pc
+          fi
+          go test -v -race ./...
 
       - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
@@ -102,7 +107,9 @@ jobs:
       - name: Build
         run: |
           if [ "$RUNNER_OS" = "Linux" ]; then
-            PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig wails build -tags "webkit2gtk_41"
+            # Create pkg-config alias for webkit2gtk-4.0 -> webkit2gtk-4.1
+            sudo ln -sf /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.1.pc /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.0.pc
+            wails build
           else
             wails build
           fi
