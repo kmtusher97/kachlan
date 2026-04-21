@@ -40,13 +40,12 @@ changelog:
       - "^test:"
       - "^ci:"
 
-# Uncomment after creating the kmtusher97/homebrew-tap repo:
-# brews:
-#   - repository:
-#       owner: kmtusher97
-#       name: homebrew-tap
-#     homepage: "https://github.com/kmtusher97/kachlan"
-#     description: "Fast video compression powered by ffmpeg"
-#     license: "MIT"
-#     dependencies:
-#       - name: ffmpeg
+brews:
+  - repository:
+      owner: kmtusher97
+      name: homebrew-tap
+    homepage: "https://github.com/kmtusher97/kachlan"
+    description: "Fast video compression powered by ffmpeg"
+    license: "MIT"
+    dependencies:
+      - name: ffmpeg
