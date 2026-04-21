@@ -139,6 +139,54 @@ func TestCompressSingleFileCustomOutput(t *testing.T) {
 	}
 }
 
+func TestCompressSingleFileWithSpaces(t *testing.T) {
+	requireFFmpeg(t)
+
+	dir := t.TempDir()
+	input := generateTestVideo(t, dir, "my vacation video.mp4")
+
+	err := compressSingle(input, 28, "ultrafast", "")
+	if err != nil {
+		t.Fatalf("compressSingle failed: %v", err)
+	}
+
+	expected := filepath.Join(dir, "my vacation video-compressed.mp4")
+	info, err := os.Stat(expected)
+	if err != nil {
+		t.Fatalf("expected output file %s not found: %v", expected, err)
+	}
+	if info.Size() == 0 {
+		t.Fatal("output file is empty")
+	}
+}
+
+func TestCompressFolderWithSpacesInNames(t *testing.T) {
+	requireFFmpeg(t)
+
+	dir := t.TempDir()
+	srcDir := filepath.Join(dir, "my home videos")
+	subDir := filepath.Join(srcDir, "summer trip")
+	if err := os.MkdirAll(subDir, 0755); err != nil {
+		t.Fatal(err)
+	}
+
+	generateTestVideo(t, srcDir, "family dinner.mp4")
+	generateTestVideo(t, subDir, "beach day 2024.mov")
+
+	err := compressFolder(srcDir, 28, "ultrafast", "", 1)
+	if err != nil {
+		t.Fatalf("compressFolder failed: %v", err)
+	}
+
+	outDir := srcDir + "-compressed"
+	for _, rel := range []string{"family dinner.mp4", "summer trip/beach day 2024.mov"} {
+		p := filepath.Join(outDir, rel)
+		if _, err := os.Stat(p); err != nil {
+			t.Errorf("expected output %s not found: %v", p, err)
+		}
+	}
+}
+
 func TestCompressFolderCreatesCompressedFolder(t *testing.T) {
 	requireFFmpeg(t)
 
