@@ -11,8 +11,13 @@ dist/
 *.test
 
 # Go workspace
-go.work
 go.work.sum
+
+# GUI build output
+gui/build/bin/
+
+# Wails auto-generated bindings
+gui/frontend/wailsjs/
 
 # OS files
 .DS_Store
@@ -23,8 +28,3 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
-
-# Python artifacts
-__pycache__/
-*.pyc
-.mypy_cache/

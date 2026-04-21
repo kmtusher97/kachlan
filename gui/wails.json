@@ -1,0 +1,18 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "kachlan",
+  "outputfilename": "kachlan",
+  "frontend:install": "",
+  "frontend:build": "",
+  "author": {
+    "name": "kmtusher97",
+    "email": ""
+  },
+  "info": {
+    "companyName": "kmtusher97",
+    "productName": "kachlan",
+    "productVersion": "0.3.0",
+    "copyright": "Copyright 2026 kachlan contributors",
+    "comments": "Fast video compression powered by ffmpeg"
+  }
+}
