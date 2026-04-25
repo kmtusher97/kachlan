@@ -98,26 +98,38 @@ func getLocalFFmpegPath() string {
 	return filepath.Join(getLocalBinDir(), binName)
 }
 
-// getBundledFFmpegPath returns the path to bundled ffmpeg if running from a macOS .app bundle
+// getBundledFFmpegPath returns the path to bundled ffmpeg if running from an app bundle
 func getBundledFFmpegPath() string {
-	if runtime.GOOS != "darwin" {
-		return ""
-	}
-
 	// Get executable path
 	exePath, err := os.Executable()
 	if err != nil {
 		return ""
 	}
 
-	// Check if running from .app bundle (path contains .app/Contents/MacOS/)
-	if !strings.Contains(exePath, ".app/Contents/MacOS/") {
+	switch runtime.GOOS {
+	case "darwin":
+		// Check if running from .app bundle (path contains .app/Contents/MacOS/)
+		if !strings.Contains(exePath, ".app/Contents/MacOS/") {
+			return ""
+		}
+		// ffmpeg should be in the same directory as the executable
+		exeDir := filepath.Dir(exePath)
+		return filepath.Join(exeDir, "ffmpeg")
+
+	case "linux":
+		// Check if running from system installation (/usr/bin/kachlan)
+		if exePath == "/usr/bin/kachlan" {
+			// Bundled ffmpeg is installed as kachlan-ffmpeg
+			bundledPath := "/usr/bin/kachlan-ffmpeg"
+			if _, err := os.Stat(bundledPath); err == nil {
+				return bundledPath
+			}
+		}
+		return ""
+
+	default:
 		return ""
 	}
-
-	// ffmpeg should be in the same directory as the executable
-	exeDir := filepath.Dir(exePath)
-	return filepath.Join(exeDir, "ffmpeg")
 }
 
 func getDownloadURL() (url, filename string) {

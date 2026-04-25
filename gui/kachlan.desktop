@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Kachlan
+Comment=Fast video compression powered by ffmpeg
+Exec=/usr/bin/kachlan
+Icon=kachlan
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;
+Keywords=video;compression;ffmpeg;encode;
+StartupNotify=true

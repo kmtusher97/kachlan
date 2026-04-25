@@ -20,7 +20,7 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 <tr>
 <td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_windows_amd64.zip">Windows (x64)</a></td>
 <td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_darwin_universal.dmg">macOS (Universal)</a><br><sub>✨ Includes ffmpeg</sub></td>
-<td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_linux_amd64.tar.gz">Linux (x64)</a></td>
+<td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_linux_amd64.deb">Linux (x64)</a><br><sub>✨ Includes ffmpeg</sub></td>
 </tr>
 </table>
 

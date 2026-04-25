@@ -42,7 +42,7 @@ jobs:
             artifact: kachlan-gui_windows_amd64.zip
           - os: ubuntu-latest
             platform: linux/amd64
-            artifact: kachlan-gui_linux_amd64.tar.gz
+            artifact: kachlan-gui_linux_amd64.deb
     runs-on: ${{ matrix.os }}
 
     defaults:
@@ -114,11 +114,55 @@ jobs:
           cd build/bin
           7z a ../../${{ matrix.artifact }} kachlan.exe
 
+      - name: Bundle ffmpeg (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          # Download ffmpeg static build
+          curl -L -o /tmp/ffmpeg.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+          # Extract
+          tar xf /tmp/ffmpeg.tar.xz -C /tmp
+          # Find and copy ffmpeg binary
+          find /tmp/ffmpeg-*-amd64-static -name ffmpeg -exec cp {} build/bin/ \;
+          find /tmp/ffmpeg-*-amd64-static -name ffprobe -exec cp {} build/bin/ \;
+          # Make executable
+          chmod +x build/bin/ffmpeg build/bin/ffprobe
+
       - name: Package (Linux)
         if: runner.os == 'Linux'
         run: |
-          cd build/bin
-          tar czf ../../${{ matrix.artifact }} kachlan
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=${VERSION#v}
+
+          # Create .deb package structure
+          mkdir -p deb-package/DEBIAN
+          mkdir -p deb-package/usr/bin
+          mkdir -p deb-package/usr/share/applications
+          mkdir -p deb-package/usr/share/icons/hicolor/scalable/apps
+
+          # Copy binary and bundled ffmpeg
+          cp build/bin/kachlan deb-package/usr/bin/
+          cp build/bin/ffmpeg deb-package/usr/bin/kachlan-ffmpeg
+          cp build/bin/ffprobe deb-package/usr/bin/kachlan-ffprobe
+
+          # Copy desktop entry and icon
+          cp kachlan.desktop deb-package/usr/share/applications/
+          cp ../assets/logo.svg deb-package/usr/share/icons/hicolor/scalable/apps/kachlan.svg
+
+          # Create control file
+          cat > deb-package/DEBIAN/control << EOF
+          Package: kachlan
+          Version: ${VERSION}
+          Section: video
+          Priority: optional
+          Architecture: amd64
+          Maintainer: kmtusher97
+          Description: Fast video compression powered by ffmpeg
+           Kachlan is a graphical desktop app for video compression with drag-and-drop,
+           progress bar, and quality controls. Includes bundled ffmpeg.
+          EOF
+
+          # Build .deb package
+          dpkg-deb --build deb-package ${{ matrix.artifact }}
 
       - name: Upload to release
         shell: bash
