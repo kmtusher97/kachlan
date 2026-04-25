@@ -19,10 +19,24 @@ var (
 // If ffprobe is not found, only ffmpeg path is updated.
 func SetFFmpegPath(path string) {
 	ffmpegPath = path
-	// Try to find ffprobe in the same directory
+
+	// Try to find ffprobe
 	dir := filepath.Dir(path)
+	base := filepath.Base(path)
+	ext := filepath.Ext(path)
+
+	// Check for bundled ffprobe (e.g., kachlan-ffmpeg -> kachlan-ffprobe)
+	if strings.Contains(base, "-ffmpeg") {
+		probePath := filepath.Join(dir, strings.Replace(base, "-ffmpeg", "-ffprobe", 1))
+		if _, err := os.Stat(probePath); err == nil {
+			ffprobePath = probePath
+			return
+		}
+	}
+
+	// Check for standard ffprobe in the same directory
 	probeName := "ffprobe"
-	if filepath.Ext(path) == ".exe" {
+	if ext == ".exe" {
 		probeName = "ffprobe.exe"
 	}
 	probePath := filepath.Join(dir, probeName)
