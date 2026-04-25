@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"sync"
 
@@ -49,8 +48,22 @@ func newRootCmd() *cobra.Command {
 }
 
 func run(input string, crf int, preset, output string, workers int) error {
-	if _, err := exec.LookPath("ffmpeg"); err != nil {
-		return fmt.Errorf("ffmpeg is not installed. Install it first:\n  macOS:   brew install ffmpeg\n  Ubuntu:  sudo apt install ffmpeg\n  Fedora:  sudo dnf install ffmpeg\n  Windows: winget install ffmpeg")
+	// Check if ffmpeg is available
+	ffmpegPath, err := media.GetFFmpegPath()
+	if err != nil {
+		fmt.Println("ffmpeg not found. Installing...")
+		ffmpegPath, err = media.InstallFFmpeg(func(pct float64) {
+			fmt.Printf("\rDownloading ffmpeg: %.0f%%", pct)
+		})
+		fmt.Println() // newline after progress
+		if err != nil {
+			return fmt.Errorf("failed to install ffmpeg: %w\nYou can manually install it:\n  macOS:   brew install ffmpeg\n  Ubuntu:  sudo apt install ffmpeg\n  Fedora:  sudo dnf install ffmpeg\n  Windows: winget install ffmpeg", err)
+		}
+		fmt.Printf("ffmpeg installed to %s\n\n", ffmpegPath)
+		media.SetFFmpegPath(ffmpegPath)
+	} else if ffmpegPath != "ffmpeg" {
+		// Using local installation
+		media.SetFFmpegPath(ffmpegPath)
 	}
 
 	info, err := os.Stat(input)

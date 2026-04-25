@@ -33,7 +33,7 @@ func CompressVideo(ctx context.Context, input, output string, crf int, preset st
 
 	args = append(args, "-y", output)
 
-	cmd := exec.CommandContext(ctx, "ffmpeg", args...)
+	cmd := exec.CommandContext(ctx, ffmpegPath, args...)
 
 	if onProgress != nil && durationUs > 0 {
 		stdout, err := cmd.StdoutPipe()
@@ -48,8 +48,7 @@ func CompressVideo(ctx context.Context, input, output string, crf int, preset st
 		scanner := bufio.NewScanner(stdout)
 		for scanner.Scan() {
 			line := scanner.Text()
-			if strings.HasPrefix(line, "out_time_us=") {
-				val := strings.TrimPrefix(line, "out_time_us=")
+			if val, ok := strings.CutPrefix(line, "out_time_us="); ok {
 				if us, err := strconv.ParseInt(val, 10, 64); err == nil && us > 0 {
 					pct := min(float64(us)/float64(durationUs)*100, 100)
 					onProgress(pct)

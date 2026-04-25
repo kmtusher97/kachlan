@@ -24,6 +24,48 @@ func NewApp() *App {
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+
+	// Check and auto-install ffmpeg if needed
+	go a.ensureFFmpeg()
+}
+
+func (a *App) ensureFFmpeg() {
+	ffmpegPath, err := media.GetFFmpegPath()
+	if err != nil {
+		// ffmpeg not found, install it
+		runtime.EventsEmit(a.ctx, "ffmpeg:installing", map[string]any{
+			"message": "Installing ffmpeg...",
+		})
+
+		ffmpegPath, err = media.InstallFFmpeg(func(pct float64) {
+			runtime.EventsEmit(a.ctx, "ffmpeg:progress", map[string]any{
+				"percent": pct,
+			})
+		})
+
+		if err != nil {
+			runtime.EventsEmit(a.ctx, "ffmpeg:error", map[string]any{
+				"error": fmt.Sprintf("Failed to install ffmpeg: %v", err),
+			})
+			return
+		}
+
+		media.SetFFmpegPath(ffmpegPath)
+		runtime.EventsEmit(a.ctx, "ffmpeg:ready", map[string]any{
+			"path": ffmpegPath,
+		})
+	} else if ffmpegPath != "ffmpeg" {
+		// Using local installation
+		media.SetFFmpegPath(ffmpegPath)
+		runtime.EventsEmit(a.ctx, "ffmpeg:ready", map[string]any{
+			"path": ffmpegPath,
+		})
+	} else {
+		// System ffmpeg found
+		runtime.EventsEmit(a.ctx, "ffmpeg:ready", map[string]any{
+			"path": "system",
+		})
+	}
 }
 
 type FileResult struct {
@@ -190,7 +232,7 @@ func (a *App) fileResult(input, output string) FileResult {
 }
 
 func (a *App) emitProgress(file string, done, total int, status string) {
-	runtime.EventsEmit(a.ctx, "compress:progress", map[string]interface{}{
+	runtime.EventsEmit(a.ctx, "compress:progress", map[string]any{
 		"file":   file,
 		"done":   done,
 		"total":  total,
@@ -199,7 +241,7 @@ func (a *App) emitProgress(file string, done, total int, status string) {
 }
 
 func (a *App) emitPercent(file string, percent float64) {
-	runtime.EventsEmit(a.ctx, "compress:percent", map[string]interface{}{
+	runtime.EventsEmit(a.ctx, "compress:percent", map[string]any{
 		"file":    file,
 		"percent": percent,
 	})

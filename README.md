@@ -10,9 +10,7 @@ Fast video compression CLI powered by ffmpeg. Compress a single file or an entir
 
 ## Download
 
-> **Prerequisite:** [ffmpeg](https://ffmpeg.org/download.html) must be installed and available in your PATH.
->
-> macOS: `brew install ffmpeg` | Ubuntu: `sudo apt install ffmpeg` | Windows: `winget install ffmpeg`
+> **No manual setup required!** kachlan automatically downloads and installs ffmpeg on first run if it's not already installed.
 
 ### Desktop App (GUI)
 
@@ -21,7 +19,7 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 <table>
 <tr>
 <td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_windows_amd64.zip">Windows (x64)</a></td>
-<td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_darwin_universal.zip">macOS (Universal)</a></td>
+<td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_darwin_universal.dmg">macOS (Universal)</a><br><sub>✨ Includes ffmpeg</sub></td>
 <td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_linux_amd64.tar.gz">Linux (x64)</a></td>
 </tr>
 </table>
