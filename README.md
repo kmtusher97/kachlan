@@ -31,6 +31,11 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 
    *Or run in Terminal:* `xattr -d com.apple.quarantine /Applications/kachlan.app`
 
+4. **If app doesn't appear in Launchpad:** Run in Terminal:
+   ```bash
+   killall Dock
+   ```
+
 > ℹ️ macOS shows a security warning because the app is not notarized. This is safe to bypass for open-source apps.
 
 ### Command Line (CLI)
