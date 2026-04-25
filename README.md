@@ -18,11 +18,20 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 
 <table>
 <tr>
-<td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_windows_amd64.zip">Windows (x64)</a></td>
+<td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_windows_amd64.zip">Windows (x64)</a><br><sub>✨ Includes ffmpeg</sub></td>
 <td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_darwin_universal.dmg">macOS (Universal)</a><br><sub>✨ Includes ffmpeg</sub></td>
 <td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_linux_amd64.deb">Linux (x64)</a><br><sub>✨ Includes ffmpeg</sub></td>
 </tr>
 </table>
+
+**Windows Installation:**
+
+1. Download and extract the [ZIP file](https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_windows_amd64.zip)
+2. Run `kachlan.exe`
+
+> ✨ **Includes ffmpeg** - ffmpeg.exe and ffprobe.exe are bundled in the ZIP. No separate installation needed!
+
+---
 
 **Linux Installation:**
 

@@ -114,12 +114,24 @@ jobs:
             "${{ matrix.artifact }}" \
             "build/bin/kachlan.app"
 
+      - name: Bundle ffmpeg (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          # Download ffmpeg static build
+          curl -L -o ffmpeg-windows.zip https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip
+          # Extract (7z is pre-installed on Windows runners)
+          7z x ffmpeg-windows.zip -o.
+          # Find and copy binaries
+          find . -name "ffmpeg.exe" -path "*/bin/*" -exec cp {} build/bin/ \;
+          find . -name "ffprobe.exe" -path "*/bin/*" -exec cp {} build/bin/ \;
+
       - name: Package (Windows)
         if: runner.os == 'Windows'
         shell: bash
         run: |
           cd build/bin
-          7z a ../../${{ matrix.artifact }} kachlan.exe
+          7z a ../../${{ matrix.artifact }} kachlan.exe ffmpeg.exe ffprobe.exe
 
       - name: Bundle ffmpeg (Linux)
         if: runner.os == 'Linux'

@@ -127,6 +127,15 @@ func getBundledFFmpegPath() string {
 		}
 		return ""
 
+	case "windows":
+		// Check for ffmpeg.exe in the same directory as the executable
+		exeDir := filepath.Dir(exePath)
+		bundledPath := filepath.Join(exeDir, "ffmpeg.exe")
+		if _, err := os.Stat(bundledPath); err == nil {
+			return bundledPath
+		}
+		return ""
+
 	default:
 		return ""
 	}
