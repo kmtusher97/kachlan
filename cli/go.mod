@@ -1,8 +1,11 @@
 module github.com/kmtusher97/kachlan/cli
 
-go 1.24
+go 1.26
 
-require github.com/spf13/cobra v1.10.2
+require (
+	github.com/kmtusher97/kachlan/media v0.0.0-20260421163800-2ec9da975453
+	github.com/spf13/cobra v1.10.2
+)
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
