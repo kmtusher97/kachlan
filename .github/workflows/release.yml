@@ -36,7 +36,7 @@ jobs:
         include:
           - os: macos-latest
             platform: darwin/universal
-            artifact: kachlan-gui_darwin_universal.zip
+            artifact: kachlan-gui_darwin_universal.dmg
           - os: windows-latest
             platform: windows/amd64
             artifact: kachlan-gui_windows_amd64.zip
@@ -76,11 +76,36 @@ jobs:
           fi
           wails build -platform ${{ matrix.platform }} $TAGS
 
+      - name: Bundle ffmpeg (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          # Download ffmpeg and ffprobe static builds
+          curl -L -o /tmp/ffmpeg.7z https://evermeet.cx/ffmpeg/getrelease/ffmpeg/7z
+          curl -L -o /tmp/ffprobe.7z https://evermeet.cx/ffmpeg/getrelease/ffprobe/7z
+          # Extract using 7z (pre-installed on macOS runners)
+          7z x /tmp/ffmpeg.7z -o/tmp/ffmpeg-extracted
+          7z x /tmp/ffprobe.7z -o/tmp/ffprobe-extracted
+          # Copy to app bundle
+          cp /tmp/ffmpeg-extracted/ffmpeg build/bin/kachlan.app/Contents/MacOS/
+          cp /tmp/ffprobe-extracted/ffprobe build/bin/kachlan.app/Contents/MacOS/
+          # Make executable
+          chmod +x build/bin/kachlan.app/Contents/MacOS/ffmpeg
+          chmod +x build/bin/kachlan.app/Contents/MacOS/ffprobe
+
       - name: Package (macOS)
         if: runner.os == 'macOS'
         run: |
-          cd build/bin
-          zip -r ../../${{ matrix.artifact }} kachlan.app
+          brew install create-dmg
+          create-dmg \
+            --volname "kachlan" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "kachlan.app" 175 190 \
+            --hide-extension "kachlan.app" \
+            --app-drop-link 425 190 \
+            "${{ matrix.artifact }}" \
+            "build/bin/kachlan.app"
 
       - name: Package (Windows)
         if: runner.os == 'Windows'

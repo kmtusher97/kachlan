@@ -8,6 +8,29 @@ import (
 	"strings"
 )
 
+var (
+	// ffmpegPath is the path to the ffmpeg binary. Defaults to "ffmpeg" (PATH lookup).
+	ffmpegPath = "ffmpeg"
+	// ffprobePath is the path to the ffprobe binary. Defaults to "ffprobe" (PATH lookup).
+	ffprobePath = "ffprobe"
+)
+
+// SetFFmpegPath sets the custom path to ffmpeg and ffprobe binaries.
+// If ffprobe is not found, only ffmpeg path is updated.
+func SetFFmpegPath(path string) {
+	ffmpegPath = path
+	// Try to find ffprobe in the same directory
+	dir := filepath.Dir(path)
+	probeName := "ffprobe"
+	if filepath.Ext(path) == ".exe" {
+		probeName = "ffprobe.exe"
+	}
+	probePath := filepath.Join(dir, probeName)
+	if _, err := os.Stat(probePath); err == nil {
+		ffprobePath = probePath
+	}
+}
+
 var videoExts = map[string]bool{
 	".mp4": true, ".avi": true, ".mov": true, ".mkv": true,
 	".wmv": true, ".flv": true, ".webm": true, ".m4v": true,
@@ -37,7 +60,7 @@ func FindVideos(dir string) ([]string, error) {
 
 // DurationUs returns the video duration in microseconds using ffprobe, or 0 if unknown.
 func DurationUs(path string) int64 {
-	cmd := exec.Command("ffprobe",
+	cmd := exec.Command(ffprobePath,
 		"-v", "error",
 		"-show_entries", "format=duration",
 		"-of", "default=noprint_wrappers=1:nokey=1",

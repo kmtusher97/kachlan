@@ -31,14 +31,24 @@ const resultsErrors = document.getElementById("results-errors");
 
 // Check ffmpeg on startup
 async function init() {
-  try {
-    const ok = await window.go.main.App.CheckFFmpeg();
-    if (!ok) {
-      ffmpegWarning.classList.remove("hidden");
-    }
-  } catch (e) {
+  // Listen for ffmpeg installation events
+  window.runtime.EventsOn("ffmpeg:installing", (data) => {
+    ffmpegWarning.textContent = data.message;
     ffmpegWarning.classList.remove("hidden");
-  }
+  });
+
+  window.runtime.EventsOn("ffmpeg:progress", (data) => {
+    ffmpegWarning.textContent = `Installing ffmpeg: ${Math.round(data.percent)}%`;
+  });
+
+  window.runtime.EventsOn("ffmpeg:ready", (data) => {
+    ffmpegWarning.classList.add("hidden");
+  });
+
+  window.runtime.EventsOn("ffmpeg:error", (data) => {
+    ffmpegWarning.textContent = `⚠️ ${data.error}. Please install ffmpeg manually.`;
+    ffmpegWarning.classList.remove("hidden");
+  });
 }
 
 // CRF slider
