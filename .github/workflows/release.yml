@@ -96,6 +96,12 @@ jobs:
       - name: Package (macOS)
         if: runner.os == 'macOS'
         run: |
+          # Remove quarantine attributes from the app bundle
+          xattr -cr build/bin/kachlan.app
+
+          # Ad-hoc code signing (no certificate required, helps with Gatekeeper)
+          codesign --force --deep --sign - build/bin/kachlan.app
+
           brew install create-dmg
           create-dmg \
             --volname "kachlan" \
