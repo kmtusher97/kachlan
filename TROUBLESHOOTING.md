@@ -72,6 +72,23 @@ Windows Defender may show a warning because the app is not signed.
 
 ## Linux Issues
 
+### ⚠️ "kachlan is potentially unsafe" warning in Software Center
+
+Ubuntu Software may show a warning because the package is from a third-party source (not Ubuntu's official repositories).
+
+**This is expected and safe:**
+- Kachlan is open-source (MIT licensed)
+- Source code is available on GitHub
+- The package includes all necessary metadata and license information
+
+**To install anyway:**
+1. Click through the warning, or
+2. Install via command line: `sudo apt install ./kachlan-gui_linux_amd64.deb`
+
+After installation, the app works normally.
+
+---
+
 ### ❌ App won't start after installing .deb
 
 The app may not have execute permissions.

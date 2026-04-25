@@ -24,6 +24,20 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 </tr>
 </table>
 
+**Linux Installation:**
+
+Download the [.deb file](https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_linux_amd64.deb) and install:
+
+```bash
+sudo apt install ./kachlan-gui_linux_amd64.deb
+```
+
+Or double-click the .deb file to install via Software Center.
+
+> ⚠️ Ubuntu Software may show "potentially unsafe" warning because this is not from Ubuntu's official repositories. This is expected for third-party packages. The app is open-source (MIT licensed) and safe to install.
+
+---
+
 **macOS Installation:**
 
 ⚠️ **macOS Gatekeeper Warning:** This app is not notarized by Apple. You'll need to bypass Gatekeeper.
