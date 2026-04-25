@@ -15,7 +15,9 @@ go.work.sum
 
 # GUI build output
 gui/build/bin/
-gui/build/darwin/
+gui/build/darwin/*
+!gui/build/darwin/Info.plist
+!gui/build/darwin/Info.dev.plist
 gui/gui
 
 # Wails auto-generated bindings

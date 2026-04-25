@@ -23,6 +23,10 @@
         <string>true</string>
         <key>NSHumanReadableCopyright</key>
         <string>{{.Info.Copyright}}</string>
+        <key>LSApplicationCategoryType</key>
+        <string>public.app-category.video</string>
+        <key>NSSupportsAutomaticGraphicsSwitching</key>
+        <true/>
         {{if .Info.FileAssociations}}
         <key>CFBundleDocumentTypes</key>
         <array>
