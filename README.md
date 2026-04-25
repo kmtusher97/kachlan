@@ -26,29 +26,44 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 
 **macOS Installation:**
 
-⚠️ **IMPORTANT:** macOS may block the app as "damaged" because it's not notarized.
+⚠️ **macOS Gatekeeper Warning:** This app is not notarized by Apple. You'll need to bypass Gatekeeper.
 
-**Option 1: Automatic Installation (Recommended)**
+**Step 1: Download and Install**
+1. Download the [DMG file](https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_darwin_universal.dmg)
+2. Open the DMG
+3. Drag **kachlan** to **Applications** folder
+
+**Step 2: Bypass Gatekeeper (Required)**
+
+macOS will show *"Apple could not verify 'kachlan' is free of malware"* when you first open it.
+
+**Method 1: System Settings (Easiest)**
+1. Try to open kachlan from Applications
+2. Click **"Done"** on the warning dialog
+3. Open **System Settings** → **Privacy & Security**
+4. Scroll down to the Security section
+5. Click **"Open Anyway"** next to the kachlan message
+6. Click **"Open"** in the confirmation dialog
+
+**Method 2: Right-Click (Alternative)**
+1. Right-click **kachlan** in Applications
+2. Select **"Open"**
+3. Click **"Open"** in the dialog
+
+**Method 3: Terminal (Advanced)**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kmtusher97/kachlan/main/install-macos.sh | bash
+sudo spctl --add /Applications/kachlan.app
+sudo xattr -rd com.apple.quarantine /Applications/kachlan.app
 ```
 
-**Option 2: Manual Installation**
-1. Download the DMG file
-2. **Before opening the DMG**, run this command in Terminal:
-   ```bash
-   xattr -d com.apple.quarantine ~/Downloads/kachlan-gui_darwin_universal.dmg
-   ```
-3. Open the DMG and drag kachlan to Applications folder
-4. **First launch:** Right-click the app → "Open" → click "Open" in the dialog
-
-**If you already copied the app and see "damaged" error:**
+**If app doesn't appear in Launchpad:**
 ```bash
-xattr -cr /Applications/kachlan.app
 killall Dock
 ```
 
-> ℹ️ macOS Gatekeeper blocks unsigned apps. These commands are safe for open-source software.
+> ℹ️ This is normal for open-source apps without an Apple Developer certificate. The source code is public and safe to review.
+> 
+> Having trouble? Check the [Troubleshooting Guide](TROUBLESHOOTING.md)
 
 ### Command Line (CLI)
 
