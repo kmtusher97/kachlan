@@ -24,6 +24,15 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 </tr>
 </table>
 
+**macOS Installation:**
+1. Download and open the DMG file
+2. Drag kachlan to Applications folder
+3. **First launch:** Right-click the app → "Open" → click "Open" in the dialog
+
+   *Or run in Terminal:* `xattr -d com.apple.quarantine /Applications/kachlan.app`
+
+> ℹ️ macOS shows a security warning because the app is not notarized. This is safe to bypass for open-source apps.
+
 ### Command Line (CLI)
 
 <table>
