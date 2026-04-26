@@ -16,6 +16,22 @@ Fast video compression CLI powered by ffmpeg. Compress a single file or an entir
 
 A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 
+<p align="center">
+  <img src="assets/screenshots/regular-compress.png" alt="kachlan GUI - Main Interface" width="700"/>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/main-interface.png" alt="kachlan GUI - Video List Preview" width="700"/>
+</p>
+
+**Features:**
+- 🎯 Drag-and-drop file or folder selection
+- 📋 Video list preview before compression
+- ⚙️ Quality controls (CRF, speed presets)
+- 📁 Custom output path selection
+- 📊 Real-time progress tracking
+- ✨ Bundled ffmpeg - no manual setup required
+
 <table>
 <tr>
 <td align="center" width="33%"><a href="https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_windows_amd64.zip">Windows (x64)</a><br><sub>✨ Includes ffmpeg</sub></td>
