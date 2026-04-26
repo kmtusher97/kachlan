@@ -81,6 +81,17 @@ type CompressResponse struct {
 	Errors  []string     `json:"errors"`
 }
 
+type VideoInfo struct {
+	Name         string `json:"name"`
+	Path         string `json:"path"`
+	RelativePath string `json:"relativePath"`
+}
+
+type VideoListResponse struct {
+	Videos []VideoInfo `json:"videos"`
+	Error  string      `json:"error,omitempty"`
+}
+
 // CheckFFmpeg returns true if ffmpeg is available in PATH.
 func (a *App) CheckFFmpeg() bool {
 	return media.CheckFFmpeg()
@@ -106,8 +117,52 @@ func (a *App) SelectFolder() (string, error) {
 	})
 }
 
+// SelectOutputPath opens a save dialog for choosing output file location.
+func (a *App) SelectOutputPath() (string, error) {
+	return runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
+		Title:           "Select Output Location",
+		DefaultFilename: "compressed.mp4",
+		Filters: []runtime.FileFilter{
+			{
+				DisplayName: "Video Files",
+				Pattern:     "*.mp4;*.avi;*.mov;*.mkv;*.wmv;*.flv;*.webm;*.m4v",
+			},
+		},
+	})
+}
+
+// GetFolderVideos returns metadata about video files in a folder.
+func (a *App) GetFolderVideos(folderPath string) (*VideoListResponse, error) {
+	folderPath = filepath.Clean(folderPath)
+
+	videos, err := media.FindVideos(folderPath)
+	if err != nil {
+		return &VideoListResponse{
+			Error: fmt.Sprintf("Failed to scan folder: %v", err),
+		}, nil
+	}
+
+	var videoInfos []VideoInfo
+	for _, v := range videos {
+		relPath, err := filepath.Rel(folderPath, v)
+		if err != nil {
+			relPath = filepath.Base(v) // Fallback to filename only
+		}
+
+		videoInfos = append(videoInfos, VideoInfo{
+			Name:         filepath.Base(v),
+			Path:         v,
+			RelativePath: relPath,
+		})
+	}
+
+	return &VideoListResponse{
+		Videos: videoInfos,
+	}, nil
+}
+
 // CompressFile compresses a single video file.
-func (a *App) CompressFile(input string, crf int, preset string) (*CompressResponse, error) {
+func (a *App) CompressFile(input string, crf int, preset string, customOutput string) (*CompressResponse, error) {
 	if !a.busy.CompareAndSwap(false, true) {
 		return nil, fmt.Errorf("compression already in progress")
 	}
@@ -117,7 +172,11 @@ func (a *App) CompressFile(input string, crf int, preset string) (*CompressRespo
 	a.cancel = cancel
 	defer cancel()
 
-	output := media.DefaultOutputPath(input, "compressed")
+	// Determine output path
+	output := customOutput
+	if output == "" {
+		output = media.DefaultOutputPath(input, "compressed")
+	}
 
 	a.emitProgress(filepath.Base(input), 0, 1, "compressing")
 
@@ -136,7 +195,7 @@ func (a *App) CompressFile(input string, crf int, preset string) (*CompressRespo
 }
 
 // CompressFolder compresses all videos in a folder.
-func (a *App) CompressFolder(input string, crf int, preset string, workers int) (*CompressResponse, error) {
+func (a *App) CompressFolder(input string, crf int, preset string, workers int, customOutput string) (*CompressResponse, error) {
 	if !a.busy.CompareAndSwap(false, true) {
 		return nil, fmt.Errorf("compression already in progress")
 	}
@@ -147,7 +206,12 @@ func (a *App) CompressFolder(input string, crf int, preset string, workers int) 
 	defer cancel()
 
 	input = filepath.Clean(input)
-	outDir := media.DefaultOutputDir(input, "compressed")
+
+	// Determine output directory
+	outDir := customOutput
+	if outDir == "" {
+		outDir = media.DefaultOutputDir(input, "compressed")
+	}
 
 	videos, err := media.FindVideos(input)
 	if err != nil {

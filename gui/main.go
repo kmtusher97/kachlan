@@ -16,10 +16,10 @@ func main() {
 
 	err := wails.Run(&options.App{
 		Title:     "kachlan",
-		Width:     700,
-		Height:    550,
-		MinWidth:  600,
-		MinHeight: 450,
+		Width:     770,
+		Height:    605,
+		MinWidth:  660,
+		MinHeight: 495,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

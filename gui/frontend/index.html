@@ -43,6 +43,17 @@
       <button id="btn-clear" class="btn-clear" title="Clear">&times;</button>
     </div>
 
+    <!-- Video list (shown when folder is selected) -->
+    <div id="video-list-container" class="video-list-container hidden">
+      <div class="video-list-header">
+        <span>Found Videos</span>
+        <span id="video-count" class="video-count">0 files</span>
+      </div>
+      <div id="video-list" class="video-list">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
     <!-- Settings -->
     <div id="settings" class="settings hidden">
       <div class="setting">
@@ -71,6 +82,24 @@
         <div id="workers-setting" class="setting hidden">
           <label for="workers">Workers</label>
           <input type="number" id="workers" min="1" max="8" value="2" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced Options -->
+    <div id="advanced-options" class="advanced-options hidden">
+      <div class="accordion-header" id="accordion-header">
+        <span>Advanced Options</span>
+        <span class="accordion-arrow">▼</span>
+      </div>
+      <div class="accordion-content" id="accordion-content">
+        <div class="setting">
+          <label for="custom-output">Custom Output Path (optional)</label>
+          <div class="output-path-row">
+            <input type="text" id="custom-output" placeholder="Leave empty for default" />
+            <button id="btn-browse-output" class="btn btn-secondary btn-small">Browse</button>
+          </div>
+          <div class="output-hint">Default: adds "-compressed" suffix to filename/folder</div>
         </div>
       </div>
     </div>
