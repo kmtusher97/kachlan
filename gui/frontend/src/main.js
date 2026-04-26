@@ -1,6 +1,7 @@
 // State
 let selectedPath = "";
 let isFolder = false;
+let customOutputPath = "";
 
 // DOM elements
 const ffmpegWarning = document.getElementById("ffmpeg-warning");
@@ -28,6 +29,14 @@ const progressFile = document.getElementById("progress-file");
 const results = document.getElementById("results");
 const resultsList = document.getElementById("results-list");
 const resultsErrors = document.getElementById("results-errors");
+const videoListContainer = document.getElementById("video-list-container");
+const videoList = document.getElementById("video-list");
+const videoCount = document.getElementById("video-count");
+const advancedOptions = document.getElementById("advanced-options");
+const accordionHeader = document.getElementById("accordion-header");
+const accordionContent = document.getElementById("accordion-content");
+const customOutputInput = document.getElementById("custom-output");
+const btnBrowseOutput = document.getElementById("btn-browse-output");
 
 // Check ffmpeg on startup
 async function init() {
@@ -55,6 +64,135 @@ async function init() {
 crfSlider.addEventListener("input", () => {
   crfValue.textContent = crfSlider.value;
 });
+
+// Accordion toggle
+accordionHeader.addEventListener("click", () => {
+  accordionHeader.classList.toggle("expanded");
+  accordionContent.classList.toggle("expanded");
+});
+
+// Browse output button
+btnBrowseOutput.addEventListener("click", async () => {
+  try {
+    let path;
+    if (isFolder) {
+      path = await window.go.main.App.SelectFolder();
+    } else {
+      path = await window.go.main.App.SelectOutputPath();
+    }
+    if (path) {
+      customOutputPath = path;
+      customOutputInput.value = path;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+// Track custom output input changes
+customOutputInput.addEventListener("input", (e) => {
+  customOutputPath = e.target.value.trim();
+});
+
+// Load single file
+function loadSingleFile(filePath) {
+  videoListContainer.classList.remove("hidden");
+  videoCount.textContent = "1 file";
+
+  const fileName = filePath.split("/").pop().split("\\").pop();
+
+  // Populate list with single file
+  videoList.textContent = "";
+  const item = document.createElement("div");
+  item.className = "video-item";
+  item.title = filePath;
+
+  const icon = document.createElement("span");
+  icon.className = "video-item-icon";
+  icon.textContent = "🎬";
+
+  const name = document.createElement("span");
+  name.className = "video-item-name";
+  name.textContent = fileName;
+
+  item.appendChild(icon);
+  item.appendChild(name);
+  videoList.appendChild(item);
+}
+
+// Load folder videos
+async function loadFolderVideos(folderPath) {
+  // Show loading state
+  videoList.textContent = "";
+  const loading = document.createElement("div");
+  loading.className = "video-list-loading";
+  loading.textContent = "Scanning folder...";
+  videoList.appendChild(loading);
+  videoListContainer.classList.remove("hidden");
+  videoCount.textContent = "...";
+
+  try {
+    const response = await window.go.main.App.GetFolderVideos(folderPath);
+
+    if (response.error) {
+      videoList.textContent = "";
+      const errorDiv = document.createElement("div");
+      errorDiv.className = "video-list-error";
+      errorDiv.textContent = response.error;
+      videoList.appendChild(errorDiv);
+      videoCount.textContent = "Error";
+      return;
+    }
+
+    const videos = response.videos || [];
+
+    if (videos.length === 0) {
+      videoList.textContent = "";
+      const empty = document.createElement("div");
+      empty.className = "video-list-empty";
+      empty.textContent = "No video files found in this folder";
+      videoList.appendChild(empty);
+      videoCount.textContent = "0 files";
+      return;
+    }
+
+    // Update count
+    videoCount.textContent = `${videos.length} file${videos.length !== 1 ? 's' : ''}`;
+
+    // Populate list
+    videoList.textContent = "";
+    videos.forEach(video => {
+      const item = document.createElement("div");
+      item.className = "video-item";
+      item.title = video.path;
+
+      const icon = document.createElement("span");
+      icon.className = "video-item-icon";
+      icon.textContent = "🎬";
+
+      const name = document.createElement("span");
+      name.className = "video-item-name";
+      name.textContent = video.name;
+
+      const path = document.createElement("span");
+      path.className = "video-item-path";
+      path.textContent = video.relativePath;
+
+      item.appendChild(icon);
+      item.appendChild(name);
+      item.appendChild(path);
+      videoList.appendChild(item);
+    });
+  } catch (e) {
+    console.error("Failed to load videos:", e);
+    videoList.textContent = "";
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "video-list-error";
+    errorDiv.textContent = `Failed to scan folder: ${e.message}`;
+    videoList.appendChild(errorDiv);
+    videoCount.textContent = "Error";
+  }
+}
 
 // File picker
 btnFile.addEventListener("click", async (e) => {
@@ -90,11 +228,14 @@ function selectInput(path, folder) {
   inputPath.textContent = path;
   selectedInput.classList.remove("hidden");
   settings.classList.remove("hidden");
+  advancedOptions.classList.remove("hidden");
   actions.classList.remove("hidden");
   if (folder) {
     workersSetting.classList.remove("hidden");
+    loadFolderVideos(path);
   } else {
     workersSetting.classList.add("hidden");
+    loadSingleFile(path);
   }
   results.classList.add("hidden");
   resultsErrors.classList.add("hidden");
@@ -103,8 +244,12 @@ function selectInput(path, folder) {
 function clearSelection() {
   selectedPath = "";
   isFolder = false;
+  customOutputPath = "";
+  customOutputInput.value = "";
   selectedInput.classList.add("hidden");
   settings.classList.add("hidden");
+  advancedOptions.classList.add("hidden");
+  videoListContainer.classList.add("hidden");
   actions.classList.add("hidden");
   results.classList.add("hidden");
   progress.classList.add("hidden");
@@ -131,11 +276,11 @@ btnCompress.addEventListener("click", async () => {
     if (isFolder) {
       const workers = parseInt(workersInput.value) || 2;
       progressText.textContent = "Compressing folder...";
-      response = await window.go.main.App.CompressFolder(selectedPath, crf, preset, workers);
+      response = await window.go.main.App.CompressFolder(selectedPath, crf, preset, workers, customOutputPath);
     } else {
       progressText.textContent = "Compressing...";
       progressCount.textContent = "0%";
-      response = await window.go.main.App.CompressFile(selectedPath, crf, preset);
+      response = await window.go.main.App.CompressFile(selectedPath, crf, preset, customOutputPath);
     }
     showResults(response);
   } catch (e) {
