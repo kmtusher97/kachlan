@@ -232,3 +232,30 @@ jobs:
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           gh release upload "$VERSION" "${{ matrix.artifact }}" --clobber
+
+  release-snap:
+    needs: release-cli
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set snap version from tag
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=${VERSION#v}
+          sed -i "s/^version: .*/version: '${VERSION}'/" snapcraft.yaml
+
+      - uses: snapcore/action-build@v1
+        id: snapcraft
+
+      # Published to "edge" first; promote to stable manually via
+      # `snapcraft release kachlan <revision> stable` once verified.
+      # Skipped until the SNAPCRAFT_STORE_CREDENTIALS secret is configured
+      # (requires registering the "kachlan" name on snapcraft.io first).
+      - uses: snapcore/action-publish@v1
+        if: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS != '' }}
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+        with:
+          snap: ${{ steps.snapcraft.outputs.snap }}
+          release: edge
