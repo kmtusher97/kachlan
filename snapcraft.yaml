@@ -35,8 +35,14 @@ parts:
       go install github.com/wailsapp/wails/v2/cmd/wails@latest
       export PATH=$PATH:$(go env GOPATH)/bin
 
+      # wails' webkit2gtk-4.1 build tag is "webkit2_41", not "webkit2gtk_41" -
+      # an unrecognized tag is silently ignored, so this aliases the pkg-config
+      # name instead (same approach ci.yml uses for the same reason).
+      ln -sf /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.1.pc \
+        /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.0.pc
+
       cd gui
-      wails build -tags webkit2gtk_41
+      wails build
 
       install -Dm755 build/bin/kachlan "$CRAFT_PART_INSTALL/bin/kachlan"
       install -Dm644 ../assets/logo.svg \
