@@ -51,7 +51,13 @@ A graphical desktop app with drag-and-drop, progress bar, and quality controls.
 
 **Linux Installation:**
 
-Download the [.deb file](https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_linux_amd64.deb) and install:
+Install from the [Snap Store](https://snapcraft.io/kachlan) (recommended - no warnings, auto-updates):
+
+```bash
+sudo snap install kachlan
+```
+
+Or download the [.deb file](https://github.com/kmtusher97/kachlan/releases/latest/download/kachlan-gui_linux_amd64.deb) and install manually:
 
 ```bash
 sudo apt install ./kachlan-gui_linux_amd64.deb
@@ -59,13 +65,7 @@ sudo apt install ./kachlan-gui_linux_amd64.deb
 
 Or double-click the .deb file to install via Software Center.
 
-> ⚠️ Ubuntu Software may show "potentially unsafe" warning because this is not from Ubuntu's official repositories. This is expected for third-party packages. The app is open-source (MIT licensed) and safe to install.
-
-Or install from the Snap Store (no warning, auto-updates):
-
-```bash
-sudo snap install kachlan
-```
+> ⚠️ Ubuntu Software may show "potentially unsafe" warning for the .deb because it's not from Ubuntu's official repositories. This is expected for third-party packages. The app is open-source (MIT licensed) and safe to install - or just use the Snap Store install above to avoid the warning entirely.
 
 ---
 
