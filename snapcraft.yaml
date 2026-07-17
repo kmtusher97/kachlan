@@ -1,0 +1,66 @@
+name: kachlan
+base: core24
+version: '0.5.0'
+summary: Fast video compression powered by ffmpeg
+description: |
+  kachlan is a graphical desktop app for video compression with drag-and-drop,
+  progress bar, and quality controls. Includes bundled ffmpeg and ffprobe -
+  no manual setup required.
+grade: stable
+confinement: strict
+license: MIT
+
+apps:
+  kachlan:
+    command: bin/kachlan
+    desktop: usr/share/applications/kachlan.desktop
+    extensions: [gnome]
+    plugs:
+      - home
+      - removable-media
+      - network
+
+parts:
+  kachlan:
+    plugin: nil
+    source: .
+    build-snaps:
+      - go/1.22/stable
+    build-packages:
+      - libgtk-3-dev
+      - libwebkit2gtk-4.1-dev
+      - pkg-config
+    override-build: |
+      go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      export PATH=$PATH:$(go env GOPATH)/bin
+
+      cd gui
+      wails build -tags webkit2gtk_41
+
+      install -Dm755 build/bin/kachlan "$CRAFT_PART_INSTALL/bin/kachlan"
+      install -Dm644 ../assets/logo.svg \
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps/kachlan.svg"
+      install -Dm644 kachlan.desktop \
+        "$CRAFT_PART_INSTALL/usr/share/applications/kachlan.desktop"
+
+  ffmpeg:
+    plugin: nil
+    build-packages:
+      - curl
+      - tar
+    override-build: |
+      curl -L -o ffmpeg.tar.xz \
+        https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+      tar xf ffmpeg.tar.xz
+      cd ffmpeg-*-amd64-static
+
+      # Installed as plain "ffmpeg"/"ffprobe" (not "kachlan-ffmpeg" as in the .deb)
+      # so media.GetFFmpegPath()'s exec.LookPath("ffmpeg") fallback finds them on
+      # the snap's PATH - the bundled-path check in media/ffmpeg.go only matches
+      # the deb's hardcoded /usr/bin/kachlan install location, not a snap prefix.
+      install -Dm755 ffmpeg "$CRAFT_PART_INSTALL/bin/ffmpeg"
+      install -Dm755 ffprobe "$CRAFT_PART_INSTALL/bin/ffprobe"
+
+      # This ffmpeg build is GPL (libx264), unlike kachlan's own MIT license.
+      install -Dm644 GPLv3.txt \
+        "$CRAFT_PART_INSTALL/usr/share/doc/kachlan/ffmpeg-LICENSE"

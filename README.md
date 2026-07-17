@@ -61,6 +61,12 @@ Or double-click the .deb file to install via Software Center.
 
 > ⚠️ Ubuntu Software may show "potentially unsafe" warning because this is not from Ubuntu's official repositories. This is expected for third-party packages. The app is open-source (MIT licensed) and safe to install.
 
+Or install from the Snap Store (no warning, auto-updates):
+
+```bash
+sudo snap install kachlan
+```
+
 ---
 
 **macOS Installation:**
