@@ -63,6 +63,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+          # wails still looks for webkit2gtk-4.0 via pkg-config by default
+          # (the real opt-in tag is "webkit2_41", not "webkit2gtk_41", which
+          # was a no-op here); alias it instead, same as ci.yml.
+          sudo ln -sf /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.1.pc \
+            /usr/lib/x86_64-linux-gnu/pkgconfig/webkit2gtk-4.0.pc
 
       - name: Install Wails
         shell: bash
@@ -70,12 +75,7 @@ jobs:
 
       - name: Build
         shell: bash
-        run: |
-          TAGS=""
-          if [ "$RUNNER_OS" = "Linux" ]; then
-            TAGS="-tags webkit2gtk_41"
-          fi
-          wails build -platform ${{ matrix.platform }} $TAGS
+        run: wails build -platform ${{ matrix.platform }}
 
       - name: Bundle ffmpeg (macOS)
         if: runner.os == 'macOS'
