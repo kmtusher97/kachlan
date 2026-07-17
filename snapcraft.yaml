@@ -24,8 +24,11 @@ parts:
   kachlan:
     plugin: nil
     source: .
+    # gui/go.mod requires go 1.26; latest/stable tracks the newest release.
+    # Pin to an exact channel (e.g. go/1.26/stable) once one is confirmed
+    # available during the local build/test pass.
     build-snaps:
-      - go/1.22/stable
+      - go/latest/stable
     build-packages:
       - libgtk-3-dev
       - libwebkit2gtk-4.1-dev
